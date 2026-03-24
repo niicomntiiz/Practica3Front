@@ -1,0 +1,135 @@
+  const [inputText, setInputText] = useState("Rihanna");
+  const [search, setSearch] = useState("Rihanna");
+  const [cocktails, setAlbums] = useState<AlbumType[]>([]);
+  const [error, setError] = useState<string|null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!search.trim()) {
+      setAlbums([]);
+      return;
+    }
+    
+    setLoading(true);
+    api.get(`search.php?s=${search}`).then((e) => {
+      setAlbums(e.data.albums || []);
+    }).catch((e) => {
+      setError(`Error cargando los datos: ${e.message ? e.message : e}`);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }, [search]);
+
+  const ejecutarBusqueda = () => {
+    setSearch(inputText);
+  };
+
+  return (
+    <div className="mainContainer">
+      <h1>Buscador de álbums de iTunes</h1>
+
+      
+
+      <div className="controlesContainer">
+
+        <input
+          type="text"
+          placeholder="Busca un álbum..."
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          className="buscadorInput"
+        />
+
+        <button className="BotonBuscar" onClick={ejecutarBusqueda}>
+          Buscar
+        </button>
+      </div>
+
+      {loading && <h1>Loading...</h1>}
+      {error && <h2>{error}</h2>}
+      
+      <div className="cocktailsContainer">
+        {!loading && cocktails.map((c) => (
+          <Link key={c.artistName} href={`/pagAlbums/${c.artistName}`}>
+            <Album album={c} />
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+
+
+
+
+  -----------
+
+
+
+  .controlesContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  width: 90%;
+  max-width: 800px;
+}
+
+.BotonBuscador {
+  height: 50px;
+  width: 250px;
+  border-radius: 12px;
+  border: none;
+  background-color: #F7F7F7;
+  box-shadow: 2px 2px 5px black;
+  cursor: pointer;
+}
+
+.BotonAleatorio h1 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.buscadorInput {
+  height: 50px;
+  width: 100%;
+  max-width: 400px;
+  padding: 0 20px;
+  border: none;
+  border-radius: 12px;
+  background-color: #F7F7F7;
+  box-shadow: 2px 2px 5px black;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.cocktailsContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.BotonBuscador {
+  height: 50px;
+  padding: 0 20px;
+  border-radius: 12px;
+  border: none;
+  background-color: white;
+  box-shadow: 2px 2px 5px black;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.BotonLista {
+  height: 50px;
+  width: 250px;
+  border-radius: 12px;
+  border: none;
+  background-color: #F7F7F7;
+  box-shadow: 2px 2px 5px black;
+  cursor: pointer;
+}

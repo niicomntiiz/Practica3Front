@@ -1,0 +1,41 @@
+.characterContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 16px;
+  border: 5px solid grey;
+  border-radius: 12px;
+  background-color: #F7F7F7;
+  margin-bottom: 0;
+  box-shadow: 2px 2px 5px black;
+  min-height: 400px;
+}
+
+.characterContainer img {
+  border-radius: 12px;
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  box-shadow: 2px 2px 5px black;
+}
+
+.characterDataContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.BotonFavorito {
+  height: 50px;
+  width: 250px;
+  border-radius: 12px;
+  border: none;
+  background-color: #F7F7F7;
+  box-shadow: 2px 2px 5px black;
+  cursor: pointer;
+}
