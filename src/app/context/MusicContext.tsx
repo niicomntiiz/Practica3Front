@@ -1,32 +1,35 @@
 'use client';
 
-import {createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
+import { AlbumType } from "../types/albums";
 
 type ListaContextType = {
-    lista: string[];
-    addLista: (item:string) => void;
-    deleteFromLista: (item:string) => void;
-}
+    lista: AlbumType[];
+    addLista: (item: AlbumType) => void;
+    deleteFromLista: (id: number) => void;
+};
 
 const ListaContext = createContext<ListaContextType | null>(null);
 
 export const ListaProvider = ({children} : {children: ReactNode}) => {
-    const [lista, setLista] = useState<string[]>([]);
+    const [lista, setLista] = useState<AlbumType[]>([]);
 
-    const addLista = (item: string) => {
-        setLista([...lista, item]);
+    const addLista = (item: AlbumType) => {
+        if (!lista.some(album => album.collectionId === item.collectionId)) {
+            setLista([...lista, item]);
+        }
     };
 
-    const deleteFromLista = (item: string) => {
-        setLista(lista.filter(x => x !== item))
+    const deleteFromLista = (id: number) => {
+        setLista(lista.filter(album => album.collectionId !== id));
     };
 
     return(
         <ListaContext.Provider value={{lista, addLista, deleteFromLista}}>
             {children}
         </ListaContext.Provider>
-    )
-}
+    );
+};
 
 export const useLista = () => {
     const context = useContext(ListaContext);
@@ -34,4 +37,4 @@ export const useLista = () => {
         throw new Error("tsx out of lista context");
     }
     return context;
-}
+};

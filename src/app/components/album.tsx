@@ -12,7 +12,8 @@ interface AlbumProps {
 
 export const Album = ({ artistId, album: initialAlbum }: AlbumProps) => {
   const [album, setAlbum] = useState<AlbumType | null>(initialAlbum || null);
-  const {addLista} = useLista();
+  const { addLista } = useLista();
+
   useEffect(() => {
     if (initialAlbum) {
       setAlbum(initialAlbum);
@@ -34,7 +35,15 @@ export const Album = ({ artistId, album: initialAlbum }: AlbumProps) => {
     <div className="characterContainer">
       <h2>{album.collectionName}</h2>
       {album.artworkUrl100 && <img src={album.artworkUrl100} alt={album.collectionName} />}
-      <button className="BotonFavorito" onClick={addLista(album)}>Favorito</button>
+      <button 
+        className="BotonFavorito" 
+        onClick={(e) => {
+          e.preventDefault();
+          addLista(album);
+        }}
+      >
+        Favorito
+      </button>
     </div>
   );
 };
