@@ -1,22 +1,24 @@
 'use client';
 
+import { useRouter } from "next/navigation";
 import { useLista } from "../context/MusicContext";
-import { Album } from "../components/album";
+import "./page.css"; // Importamos los estilos
 
 const PageLista = () => {
     const { lista, deleteFromLista } = useLista();
+    const router = useRouter();
 
     return(
       <div className="mainContainer">
-        <h1>Mis Álbumes Favoritos</h1>
-        
-        {lista.length === 0 ? (
-          <p>Aún no tienes álbumes favoritos.</p>
-        ) : (
-          <div className="albumsContainer">
-            {lista.map((album) => (
-              <div key={album.collectionId} className="favoritoItem">
-                <Album album={album} />
+        <h1>Mis Favoritos</h1>
+
+        <div className="listaContainer">
+          {lista.length === 0 ? (
+            <p>No hay favoritos guardados.</p>
+          ) : (
+            lista.map((album) => (
+              <div key={album.collectionId} className="itemFavorito">
+                <p className="nombreAlbum">{album.collectionName}</p>
                 <button 
                   className="BotonEliminar" 
                   onClick={() => deleteFromLista(album.collectionId)}
@@ -24,11 +26,11 @@ const PageLista = () => {
                   Eliminar
                 </button>
               </div>
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
       </div>  
     );
-};
+}
 
 export default PageLista;
