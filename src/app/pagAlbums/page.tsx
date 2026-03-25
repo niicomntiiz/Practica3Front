@@ -8,8 +8,8 @@ import { AlbumType } from "../types/albums";
 import "./page.css";
 
 const laOtra = () => {
-  const [inputText, setInputText] = useState("Rihanna");
-  const [search, setSearch] = useState("Rihanna");
+  const [inputText, setInputText] = useState("");
+  const [search, setSearch] = useState("");
   const [albums, setAlbums] = useState<AlbumType[]>([]);
   const [error, setError] = useState<string|null>(null);
   const [loading, setLoading] = useState<boolean>(true);

@@ -1,13 +1,17 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState, use } from "react"; // 1. Importamos 'use'
+import { useRouter } from "next/navigation";
 import { api } from "@/lib/api/api";
 import type { AlbumType } from "../../types/albums";
 import styles from "./style.module.css";
 import { useLista } from "@/app/context/MusicContext";
 
-const Page = () => {
-  const { id } = useParams();
+// 2. Definimos 'params' como una Promesa en el tipado
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+  
+  // 3. Desenvolvemos la promesa usando React.use()
+  const { id } = use(params); 
+  
   const [album, setAlbum] = useState<AlbumType | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -15,6 +19,7 @@ const Page = () => {
 
   useEffect(() => {
     if (!id) return;
+    
     api.get(`/lookup?id=${id}`)
       .then(res => {
         const resultado = res.data.results?.[0];
@@ -25,7 +30,6 @@ const Page = () => {
         }
       })
       .catch((err) => {
-        console.error("Error al obtener el álbum:", err);
         setAlbum(null);
       })
       .finally(() => setLoading(false));
