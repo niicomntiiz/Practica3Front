@@ -1,15 +1,12 @@
 "use client";
-import { useEffect, useState, use } from "react"; // 1. Importamos 'use'
+import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api/api";
 import type { AlbumType } from "../../types/albums";
 import styles from "./style.module.css";
 import { useLista } from "@/app/context/MusicContext";
 
-// 2. Definimos 'params' como una Promesa en el tipado
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {
-  
-  // 3. Desenvolvemos la promesa usando React.use()
   const { id } = use(params); 
   
   const [album, setAlbum] = useState<AlbumType | null>(null);

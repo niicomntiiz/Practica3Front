@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useLista } from "../context/MusicContext";
-import "./page.css"; // Importamos los estilos
+import "./page.css";
 
 const PageLista = () => {
     const { lista, deleteFromLista } = useLista();
