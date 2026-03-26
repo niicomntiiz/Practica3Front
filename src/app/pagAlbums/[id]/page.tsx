@@ -1,22 +1,28 @@
-"use client";
-import { useEffect, useState, use } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { api } from "@/lib/api/api";
 import type { AlbumType } from "../../types/albums";
 import styles from "./style.module.css";
 import { useLista } from "@/app/context/MusicContext";
 
-const Page = ({ params }: { params: Promise<{ id: string }> }) => {
-  const { id } = use(params); 
-  
-  const [album, setAlbum] = useState<AlbumType | null>(null);
-  const [loading, setLoading] = useState(true);
+const Page = () => {
+  // Obtenemos el id directamente usando useParams
+  const params = useParams();
+  const id = params?.id as string;
 
+  const [album, setAlbum] = useState<AlbumType | null>(null);
+  const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Mantenemos el contexto que tenías en el archivo original
   const { addLista } = useLista();
 
   useEffect(() => {
     if (!id) return;
-    
+
+    setLoading(true);
     api.get(`/lookup?id=${id}`)
       .then(res => {
         const resultado = res.data.results?.[0];
@@ -24,22 +30,34 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
           setAlbum(resultado);
         } else {
           setAlbum(null);
+          setError("Álbum no encontrado");
         }
       })
       .catch((err) => {
         setAlbum(null);
+        setError(err.message || "Error al cargar los datos");
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   }, [id]);
-
-  if (loading) return <h1>Cargando detalles...</h1>;
-  if (!album) return <h1>Álbum no encontrado</h1>;
 
   return (
     <div className={styles.detailContainer}>
-      <h1>{album.collectionName}</h1>
-      <img src={album.artworkUrl100.replace("100x100", "600x600")} alt={album.collectionName} />
-      <h3>{album.artistName}</h3>
+      {!album && loading && <h1>Cargando detalles...</h1>}
+      
+      {album && (
+        <>
+          <h1>{album.collectionName}</h1>
+          <img 
+            src={album.artworkUrl100.replace("100x100", "600x600")} 
+            alt={album.collectionName} 
+          />
+          <h3>{album.artistName}</h3>
+        </>
+      )}
+
+      {error && <h1>{error}</h1>}
     </div>
   );
 };
