@@ -8,7 +8,6 @@ import styles from "./style.module.css";
 import { useLista } from "@/app/context/MusicContext";
 
 const Page = () => {
-  // Obtenemos el id directamente usando useParams
   const params = useParams();
   const id = params?.id as string;
 
@@ -16,7 +15,6 @@ const Page = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Mantenemos el contexto que tenías en el archivo original
   const { addLista } = useLista();
 
   useEffect(() => {
@@ -35,7 +33,7 @@ const Page = () => {
       })
       .catch((err) => {
         setAlbum(null);
-        setError(err.message || "Error al cargar los datos");
+        setError(err.message || "Error al cargar");
       })
       .finally(() => {
         setLoading(false);
